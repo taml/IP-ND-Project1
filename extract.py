@@ -28,6 +28,7 @@ def load_neos(neo_csv_path):
     neo_data = []
     with open(neo_csv_path) as neo_csv:
         neo_reader = csv.reader(neo_csv)
+        next(neo_reader)
         for neo in neo_reader:
             neo_data.append(NearEarthObject(neo[3], neo[4], neo[15], neo[7]))
     return neo_data
@@ -43,7 +44,6 @@ def load_approaches(cad_json_path):
     close_approach_data = []
     with open(cad_json_path) as cad_json:
         cad_reader = json.load(cad_json)
-        for close_approach in cad_reader:
-            for ca in close_approach['data']:
-                close_approach_data.append(CloseApproach(ca['des'], ca['cd'], ca['dist'], ca['v_rel']))
+        for close_approach in cad_reader['data']:
+            close_approach_data.append(CloseApproach(close_approach[0], close_approach[3], close_approach[4], close_approach[7]))
     return close_approach_data

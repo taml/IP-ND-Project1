@@ -34,7 +34,7 @@ class NearEarthObject:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, designation, name = None, diameter = None, hazardous = False):
+    def __init__(self, designation, name = None, diameter = 0.0, hazardous = False):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
@@ -45,9 +45,9 @@ class NearEarthObject:
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
         self.designation = designation
-        self.name = name
-        self.diameter = diameter
-        self.hazardous = hazardous
+        self.name = name if name else None
+        self.diameter = float(diameter) if diameter else float('nan')
+        self.hazardous = (hazardous == 'Y')
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -64,7 +64,7 @@ class NearEarthObject:
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
         hazard_status = "is" if self.hazardous else "is not"
-        return f"{self.fullname} has a diameter of {self.diameter:.3f} km and {hazard_status} potentially hazardous."
+        return f"NEO {self.fullname} has a diameter of {self.diameter:.3f} km and {hazard_status} potentially hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -98,8 +98,8 @@ class CloseApproach:
         # The `cd_to_datetime` function will be useful.
         self._designation = _designation
         self.time = cd_to_datetime(time)  # TODO: Use the cd_to_datetime function for this attribute.
-        self.distance = distance
-        self.velocity = velocity
+        self.distance = float(distance)
+        self.velocity = float(velocity)
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
