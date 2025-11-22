@@ -71,6 +71,30 @@ class AttributeFilter:
     def __repr__(self):
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
+class DateFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.time.date()
+
+class DistanceFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.distance
+
+class VelocityFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.velocity
+
+class DiameterFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.diameter
+
+class HazardousFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.hazardous
 
 def create_filters(
         date=None, start_date=None, end_date=None,
@@ -109,7 +133,49 @@ def create_filters(
     :return: A collection of filters for use with `query`.
     """
     # TODO: Decide how you will represent your filters.
-    return ()
+    filters = []
+
+    if date is not None:
+        date_filter = DateFilter(operator.eq, date)
+        filters.append(date_filter)
+
+    if start_date is not None:
+        start_date_filter = DateFilter(operator.ge, start_date)
+        filters.append(start_date_filter)
+
+    if end_date is not None:
+        end_date_filter = DateFilter(operator.le, end_date)
+        filters.append(end_date_filter)
+
+    if distance_min is not None:
+        distance_filter_min = DistanceFilter(operator.ge, distance_min)
+        filters.append(distance_filter_min)
+
+    if distance_max is not None:
+        distance_filter_max = DistanceFilter(operator.le, distance_max)
+        filters.append(distance_filter_max)
+
+    if velocity_min is not None:
+        velocity_filter_min = VelocityFilter(operator.ge, velocity_min)
+        filters.append(velocity_filter_min)
+
+    if velocity_max is not None:
+        velocity_filter_max = VelocityFilter(operator.le, velocity_max)
+        filters.append(velocity_filter_max)
+
+    if diameter_min is not None:
+        diameter_filter_min = DiameterFilter(operator.ge, diameter_min)
+        filters.append(diameter_filter_min)
+
+    if diameter_max is not None:
+        diameter_filter_max = DiameterFilter(operator.le, diameter_max)
+        filters.append(diameter_filter_max)
+
+    if hazardous is not None:
+        hazardous = HazardousFilter(operator.eq, hazardous)
+        filters.append(hazardous)
+
+    return filters
 
 
 def limit(iterator, n=None):
