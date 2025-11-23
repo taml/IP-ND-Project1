@@ -29,6 +29,14 @@ def write_to_csv(results, filename):
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
     # TODO: Write the results to a CSV file, following the specification in the instructions.
+    with open(filename, 'w', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for result in results:
+            row = {}
+            row.update(result.serialize())
+            row.update(result.neo.serialize())
+            writer.writerow(row)
 
 
 def write_to_json(results, filename):

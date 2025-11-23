@@ -58,6 +58,9 @@ class NearEarthObject:
         # TODO: Use self.designation and self.name to build a fullname for this object.
         return f"{self.designation} ({self.name})" if self.name else self.designation
 
+    def serialize(self):
+        return {'designation': self.designation, 'name': self.name, 'diameter_km': self.diameter, 'potentially_hazardous': self.hazardous}
+
     def __str__(self):
         """Return `str(self)`."""
         # TODO: Use this object's attributes to return a human-readable string representation.
@@ -121,6 +124,9 @@ class CloseApproach:
         # build a formatted representation of the approach time.
         # TODO: Use self.designation and self.name to build a fullname for this object.
         return datetime_to_str(self.time)
+
+    def serialize(self):
+        return {'datetime_utc': self.time, 'distance_au': self.distance, 'velocity_km_s': self.velocity}
 
     def __str__(self):
         """Return `str(self)`."""
