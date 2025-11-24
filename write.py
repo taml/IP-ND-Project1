@@ -12,6 +12,7 @@ You'll edit this file in Part 4.
 """
 import csv
 import json
+from helpers import datetime_to_str
 
 
 def write_to_csv(results, filename):
@@ -32,10 +33,10 @@ def write_to_csv(results, filename):
     with open(filename, 'w', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        for result in results:
+        for res in results:
             row = {}
-            row.update(result.serialize())
-            row.update(result.neo.serialize())
+            row.update(res.serialize())
+            row.update(res.neo.serialize())
             writer.writerow(row)
 
 
@@ -51,3 +52,15 @@ def write_to_json(results, filename):
     :param filename: A Path-like object pointing to where the data should be saved.
     """
     # TODO: Write the results to a JSON file, following the specification in the instructions.
+    with open(filename, 'w', newline='') as json_file:
+        results_json = []
+        if not results:
+            json.dump(results_json, json_file)
+        for res in results:
+            row = {}
+            row.update(res.serialize())
+            row['datetime_utc'] = datetime_to_str(res.time)
+            row.update({'neo': res.neo.serialize()})
+            row['neo']['name'] = res.neo.name if res.neo.name else ''
+            results_json.append(row)
+        json.dump(results_json, json_file)
