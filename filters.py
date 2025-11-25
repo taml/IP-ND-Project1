@@ -3,7 +3,7 @@
 The `create_filters` function produces a collection of objects that is used by
 the `query` method to generate a stream of `CloseApproach` objects that match
 all of the desired criteria. The arguments to `create_filters` are provided by
-the main module and originate from the user's command-line options.
+the main module and originate from user command-line options.
 
 This function can be thought to return a collection of instances of subclasses
 of `AttributeFilter` - a 1-argument callable (on a `CloseApproach`) constructed
@@ -13,8 +13,6 @@ the supplied `CloseApproach`.
 
 The `limit` function simply limits the maximum number of values produced by an
 iterator.
-
-You'll edit this file in Tasks 3a and 3c.
 """
 import operator
 import itertools
@@ -70,29 +68,35 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Return `repr(self)`, a representation of `AttributeFilter`."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 class DateFilter(AttributeFilter):
+    """A general subclass for filters on dates."""
     @classmethod
     def get(cls, approach):
         return approach.time.date()
 
 class DistanceFilter(AttributeFilter):
+    """A general subclass for filters on distances."""
     @classmethod
     def get(cls, approach):
         return approach.distance
 
 class VelocityFilter(AttributeFilter):
+    """A general subclass for filters on velocity."""
     @classmethod
     def get(cls, approach):
         return approach.velocity
 
 class DiameterFilter(AttributeFilter):
+    """A general subclass for filters on diameters."""
     @classmethod
     def get(cls, approach):
         return approach.neo.diameter
 
 class HazardousFilter(AttributeFilter):
+    """A general subclass for filters on hazardous."""
     @classmethod
     def get(cls, approach):
         return approach.neo.hazardous
@@ -117,10 +121,6 @@ def create_filters(
     line (in particular, this means that the `--not-hazardous` flag results in
     `hazardous=False`, not to be confused with `hazardous=None`).
 
-    The return value must be compatible with the `query` method of `NEODatabase`
-    because the main module directly passes this result to that method. For now,
-    this can be thought of as a collection of `AttributeFilter`s.
-
     :param date: A `date` on which a matching `CloseApproach` occurs.
     :param start_date: A `date` on or after which a matching `CloseApproach` occurs.
     :param end_date: A `date` on or before which a matching `CloseApproach` occurs.
@@ -133,7 +133,6 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
     filters = []
 
     if date is not None:
@@ -180,15 +179,12 @@ def create_filters(
 
 
 def limit(iterator, n=None):
-    """Produce a limited stream of values from an iterator.
-
-    If `n` is 0 or None, don't limit the iterator at all.
+    """A limited stream of values from an iterator.
 
     :param iterator: An iterator of values.
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
     limit_by = None if n is None or n == 0 else n
     it = iterator
     iterator = itertools.islice(it, limit_by)
