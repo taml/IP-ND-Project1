@@ -48,8 +48,6 @@ def write_to_json(results, filename):
     """
     with open(filename, 'w', newline='') as json_file:
         results_json = []
-        if not results:
-            json.dump(results_json, json_file)
         for res in results:
             row = {}
             row.update(res.serialize())
