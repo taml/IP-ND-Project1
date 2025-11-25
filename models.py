@@ -51,7 +51,7 @@ class NearEarthObject:
 
     def serialize(self):
         """Return `dict(self)`, a serialized representation of this NEO."""
-        return {'designation': self.designation, 'name': self.name, 'diameter_km': self.diameter, 'potentially_hazardous': self.hazardous}
+        return {'designation': self.designation, 'name': self.name if self.name else '', 'diameter_km': self.diameter, 'potentially_hazardous': self.hazardous}
 
     def __str__(self):
         """Return `str(self)`, a human-readable representation of this NEO."""
@@ -110,7 +110,7 @@ class CloseApproach:
 
     def serialize(self):
         """Return `dict(self)`, a serialized representation of this `CloseApproach`."""
-        return {'datetime_utc': self.time, 'distance_au': self.distance, 'velocity_km_s': self.velocity}
+        return {'datetime_utc': self.time_str, 'distance_au': self.distance, 'velocity_km_s': self.velocity}
 
     def __str__(self):
         """Return `str(self)`, a human-readable representation of this `CloseApproach`."""

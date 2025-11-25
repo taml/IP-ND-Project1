@@ -53,8 +53,6 @@ def write_to_json(results, filename):
         for res in results:
             row = {}
             row.update(res.serialize())
-            row['datetime_utc'] = datetime_to_str(res.time)
             row.update({'neo': res.neo.serialize()})
-            row['neo']['name'] = res.neo.name if res.neo.name else ''
             results_json.append(row)
         json.dump(results_json, json_file)
